@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>peio.github.io</title>
+<meta name="description" content="Жените на публични длъжности в България, 2026: дял на жените по категория, институция и длъжност.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root {
+  --paper: #f6f7f9; --panel: #ffffff; --ink: #17202b; --ink-muted: #5a6573;
+  --line: #dde1e7; --accent: #1d6f8c; --men: #cfd5dd;
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-text: "IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --paper: #10151c; --panel: #18202a; --ink: #e8edf3; --ink-muted: #9aa6b4; --line: #2a3542; --accent: #5bb6d4; --men: #3a4654; color-scheme: dark; }
+}
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-text); font-size: 1rem; line-height: 1.5; }
+main { max-width: 44rem; margin: 0 auto; padding-block: 64px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 24px; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: 1.75rem; margin: 0; }
+.card { display: flex; flex-direction: column; gap: 10px; padding: 20px 22px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; color: inherit; text-decoration: none; }
+.card:hover { border-color: var(--accent); }
+.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.eyebrow { font-size: .8125rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .07em; margin: 0; }
+.card h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.35rem; line-height: 1.2; margin: 0; text-wrap: balance; }
+.card p { margin: 0; color: var(--ink-muted); }
+.bar { height: 10px; border-radius: 3px; background: var(--men); overflow: hidden; display: flex; }
+.bar span { width: 45.6%; background: var(--accent); }
+.go { color: var(--accent); font-weight: 500; }
+</style>
+</head>
+<body>
+<main>
+  <h1>peio.github.io</h1>
+  <a class="card" href="women-public-office-bg-2026/">
+    <p class="eyebrow">Регистър на лицата, заемащи публични длъжности · 2026</p>
+    <h2>Жените на публични длъжности в България</h2>
+    <div class="bar" aria-hidden="true"><span></span></div>
+    <p>Дял на жените по категория, институция и длъжност, подредени по реда в регистъра. Women in Bulgarian public office, 2026.</p>
+    <span class="go">Отвори таблото →</span>
+  </a>
+</main>
+</body>
+</html>
