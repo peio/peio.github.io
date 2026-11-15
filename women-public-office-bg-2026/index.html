@@ -20,6 +20,7 @@
   --women: #1d6f8c;
   --men: #cfd5dd;
   --parity: #8a94a3;
+  --rev: #c4572f;
   --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
   --font-text: "IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
   --radius: 8px;
@@ -32,12 +33,12 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --paper: #10151c; --panel: #18202a; --ink: #e8edf3; --ink-muted: #9aa6b4;
-    --line: #2a3542; --women: #5bb6d4; --men: #3a4654; --parity: #7d8a99; color-scheme: dark;
+    --line: #2a3542; --women: #5bb6d4; --men: #3a4654; --parity: #7d8a99; --rev: #e8875f; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --paper: #10151c; --panel: #18202a; --ink: #e8edf3; --ink-muted: #9aa6b4;
-  --line: #2a3542; --women: #5bb6d4; --men: #3a4654; --parity: #7d8a99; color-scheme: dark;
+  --line: #2a3542; --women: #5bb6d4; --men: #3a4654; --parity: #7d8a99; --rev: #e8875f; color-scheme: dark;
 }
 [hidden] { display: none !important; }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-text); font-size: var(--fs-body); line-height: 1.45; }
@@ -94,6 +95,35 @@ button.gw-row:hover, .gw-row[aria-expanded="true"] { background: var(--panel); }
 .gw-foot summary { cursor: pointer; color: var(--ink); }
 .gw-foot li { line-height: 1.55; margin-block: 4px; }
 .gw-foot a { color: var(--women); }
+.gw-sub { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.gw-sub h3 { font-size: var(--fs-body); font-weight: 600; margin: 0; }
+.gw-ladder { display: flex; flex-direction: column; gap: 2px; }
+.gw-lrow, .gw-scale { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) 9.5em; gap: 14px; align-items: center; }
+.gw-lrow { padding: 6px 0; }
+.gw-lrow .gw-lbl { display: block; overflow: visible; }
+.gw-lrow small { display: block; color: var(--ink-muted); font-size: .75rem; }
+.gw-ltrack { position: relative; height: 18px; }
+.gw-ax { position: absolute; top: -3px; bottom: -3px; border-left: 1px solid var(--parity); }
+.gw-ax.is-overall { border-left-style: dashed; }
+.gw-lbar { position: absolute; left: 0; top: 3px; height: 12px; border-radius: 0 3px 3px 0; background: var(--women); }
+.gw-lbar.is-aside { background: var(--men); }
+.gw-gap { display: inline-block; width: 18px; height: 3px; background: var(--women); opacity: .45; }
+.gw-gap.is-rev { background: var(--rev); opacity: 1; }
+.gw-ltrack .gw-gap { position: absolute; top: 7.5px; width: auto; }
+.gw-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; box-sizing: border-box; }
+.gw-ltrack .gw-dot { position: absolute; top: 3px; margin-left: -6px; }
+.gw-dot.is-head { background: var(--women); }
+.gw-dot.is-dep { background: var(--paper); border: 2.5px solid var(--women); }
+.gw-scale { font-size: .75rem; color: var(--ink-muted); }
+.gw-scale div { position: relative; height: 14px; }
+.gw-scale i { position: absolute; transform: translateX(-50%); font-style: normal; }
+.gw-scale i:first-child { transform: none; }
+.gw-scale i:last-child { transform: translateX(-100%); }
+@media (max-width: 560px) {
+  .gw-lrow, .gw-scale { grid-template-columns: minmax(0, 1fr) auto; row-gap: 4px; }
+  .gw-lrow .gw-ltrack, .gw-scale div { grid-column: 1 / -1; grid-row: 2; }
+  .gw-scale > span { display: none; }
+}
 @media (prefers-reduced-motion: no-preference) { .gw-caret { transition: transform .18s ease-out; } }
 @media (max-width: 560px) {
   .gw-row { grid-template-columns: minmax(0, 1fr) auto; row-gap: 4px; }
@@ -144,6 +174,23 @@ button.gw-row:hover, .gw-row[aria-expanded="true"] { background: var(--panel); }
     <div class="gw-tree" id="tree" role="tree" aria-label="Категории, институции и длъжности"></div>
   </section>
 
+  <section class="gw-sec" id="ladder">
+    <h2>Ръководители или заместници</h2>
+    <p class="gw-hint" id="ladder-note">Всички категории заедно. Плътната линия отбелязва паритета (50%), а пунктирната – общия дял на жените.</p>
+    <div class="gw-sub">
+      <h3>Дял на жените по йерархично ниво</h3>
+      <div class="gw-ladder" id="ladder-ranks" role="list"></div>
+      <div class="gw-scale" aria-hidden="true"><span></span><div><i style="left:0">0%</i><i style="left:25%">25%</i><i style="left:50%">50%</i><i style="left:75%">75%</i><i style="left:100%">100%</i></div><span></span></div>
+    </div>
+    <div class="gw-sub">
+      <h3>Ръководител и заместник в един и същ вид орган</h3>
+      <div class="gw-legend"><span><i class="gw-dot is-head"></i>Ръководител</span><span><i class="gw-dot is-dep"></i>Заместник или член</span><span><i class="gw-gap"></i>Жените са по-често заместници</span><span><i class="gw-gap is-rev"></i>Жените са по-често ръководители</span></div>
+      <div class="gw-ladder" id="ladder-pairs" role="list"></div>
+      <div class="gw-scale" aria-hidden="true"><span></span><div><i style="left:0">0%</i><i style="left:25%">25%</i><i style="left:50%">50%</i><i style="left:75%">75%</i><i style="left:100%">100%</i></div><span></span></div>
+      <p class="gw-hint">В скоби е броят на лицата. При малки групи, като 36 ректори или 49 министри, едно-две лица променят дела с няколко пункта.</p>
+    </div>
+  </section>
+
   <section class="gw-sec gw-export" id="export">
     <h2>Данни</h2>
     <p class="gw-hint">Всички редове по категория, институция и длъжност, с брой жени, мъже и общо.</p>
@@ -162,6 +209,7 @@ button.gw-row:hover, .gw-row[aria-expanded="true"] { background: var(--panel); }
       <li>Полът не е деклариран, а е изведен от името. В българския език бащиното име и фамилията се изменят по род (-ова/-ева за жени, -ов/-ев за мъже). Когато нито едно от тях не се изменя, най-често при турски, арабски или арменски имена, решава собственото име. Тези случаи са отчетени като несигурни.</li>
       <li>Нивата са колоните „Категория“, „Институция“ и „Длъжност“ от регистъра. През 2026 г. колоната „Администрация“ само повтаря категорията и институцията, затова не е отделно ниво.</li>
       <li>Подреждането „По реда в регистъра“ следва файла на регистъра: всяка категория, институция и длъжност е поставена според първия ред, на който се появява. Така на първо място са длъжностите, които регистърът изброява първи, като президента и Народното събрание.</li>
+      <li>Йерархичните нива групират 134-те наименования на длъжности по ключови думи: „Заместник…“ и „Подуправител“ са заместници, „Член…“ – членове на колективни органи, общинските съветници и народните представители – изборни представители, а главните архитекти, секретари, упълномощените лица по ЗОП и сходни длъжности – ключови служители. Останалите са ръководители. Директорите на училища, детски градини, социални и културни заведения и общински и държавни предприятия са отделени, защото са над 4 700 и иначе определят целия резултат за ръководителите.</li>
       <li>Всяко лице се брои веднъж за длъжност във всяка институция. Лице, вписано в две институции, се брои и в двете, затова общите суми са малко над броя на отделните лица.</li>
     </ul>
   </details>
@@ -309,6 +357,86 @@ button.gw-row:hover, .gw-row[aria-expanded="true"] { background: var(--panel); }
   document.getElementById('tree-q').addEventListener('input', function (e) { S.q = e.target.value; render(); });
   document.getElementById('tree-collapse').addEventListener('click', function () { S.open.clear(); render(); });
   render();
+
+  // Seniority ladder
+  var LOCAL_UNITS = 'Членовете на управителните органи на икономически';
+  var STAFF = /^(Главен секретар|Главен архитект|Директор на дирекция|Упълномощено лице|Началник кабинет|Ръководител проект|Административен секретар|Секретар|Инспектор|Главен инспектор|Началник на отдел|Ликвидатор|Прокурист|Представител|Особен търговски|Съветник|Военен представител|Национален военен|Временно управляващ|Контрольор|Заместник-главен секретар|Постоянен секретар)/;
+  function rankOf(p) {
+    var title = p.name.split(' ; ')[0];
+    if (title === 'Народен представител' || title === 'Общински съветник') return 'elected';
+    if (/^(Заместник|Зам\.|Подуправител|Вицепрезидент|Служебен заместник)/.test(title)) return 'deputy';
+    if (STAFF.test(title)) return 'staff';
+    if (/^(Член|Независим член|Съдия)/.test(title)) return 'board';
+    if (title === 'Директор' && p.parent.parent.name.indexOf(LOCAL_UNITS) === 0) return 'units';
+    return 'head';
+  }
+  var RANKS = [
+    ['head', 'Ръководители', 'кметове, министри, председатели, ректори, изпълнителни директори'],
+    ['units', 'Директори на училища, детски градини, социални и културни заведения', 'длъжност „Директор“ в общински и държавни звена и предприятия'],
+    ['deputy', 'Заместници', 'заместник-кметове, заместник-министри, заместник-ректори'],
+    ['board', 'Членове на колективни органи', 'съвети на директорите, управителни и надзорни съвети, комисии'],
+    ['elected', 'Изборни представители', 'общински съветници и народни представители'],
+    ['staff', 'Ключови служители', 'главни архитекти, главни секретари, упълномощени лица по ЗОП']
+  ];
+  var PAIRS = [
+    ['Общини', ['Кмет'], ['Заместник кмет'], 'кмет', 'заместник-кмет'],
+    ['Университети', ['Ректор'], ['Заместник-ректор'], 'ректор', 'заместник-ректор'],
+    ['Правителство', ['Министър-председател', 'Служебен министър-председател', 'Заместник министър-председател', 'Заместник министър-председател и министър', 'Служебен заместник министър-председател', 'Служебен заместник министър-председател и министър', 'Министър', 'Служебен министър'], ['Заместник-министър', 'Служебен заместник-министър'], 'министър', 'заместник-министър'],
+    ['Изпълнителни агенции', ['Изпълнителен директор'], ['Заместник-изпълнителен директор'], 'изпълнителен директор', 'заместник'],
+    ['Области', ['Областен управител'], ['Заместник-областен управител'], 'областен управител', 'заместник'],
+    ['Агенции и комисии', ['Председател'], ['Заместник-председател'], 'председател', 'заместник'],
+    ['Общински съвети', ['Председател на ОбС'], ['Общински съветник'], 'председател', 'съветник']
+  ];
+  function tally(test) {
+    var g = {F: 0, Total: 0};
+    positions.forEach(function (p) { if (test(p)) { g.F += p.F; g.Total += p.Total; } });
+    g.ShareF = share(g.F, g.Total);
+    return g;
+  }
+  var overallShare = share(total.F, total.Total);
+  function axes() {
+    var a = el('span', 'gw-ax'); a.style.left = '50%';
+    var b = el('span', 'gw-ax is-overall'); b.style.left = overallShare + '%';
+    return [a, b];
+  }
+  function ladderRow(label, note, track, nums, aria) {
+    var r = el('div', 'gw-lrow');
+    r.setAttribute('role', 'listitem');
+    r.setAttribute('aria-label', aria);
+    r.title = aria;
+    var l = el('span', 'gw-lbl', label);
+    if (note) l.append(el('small', null, note));
+    r.append(l, track, nums);
+    return r;
+  }
+  document.getElementById('ladder-note').textContent = 'Всички категории заедно. Плътната линия отбелязва паритета (50%), а пунктирната – общия дял на жените (' + pct(overallShare) + ').';
+  document.getElementById('ladder-ranks').replaceChildren.apply(document.getElementById('ladder-ranks'), RANKS.map(function (k) {
+    var g = tally(function (p) { return rankOf(p) === k[0]; });
+    var track = el('span', 'gw-ltrack');
+    var bar = el('span', 'gw-lbar' + (k[0] === 'units' ? ' is-aside' : ''));
+    bar.style.width = g.ShareF + '%';
+    track.append.apply(track, axes().concat([bar]));
+    var nums = el('span', 'gw-nums');
+    nums.append(el('b', null, pct(g.ShareF)), t(' · ' + fmt(g.Total)));
+    return ladderRow(k[1], k[2], track, nums, k[1] + ': ' + pct(g.ShareF) + ' жени, ' + fmt(g.F) + ' от ' + fmt(g.Total));
+  }));
+  document.getElementById('ladder-pairs').replaceChildren.apply(document.getElementById('ladder-pairs'), PAIRS.map(function (k) {
+    var title = function (p) { return p.name.split(' ; ')[0]; };
+    var h = tally(function (p) { return k[1].indexOf(title(p)) !== -1; });
+    var d = tally(function (p) { return k[2].indexOf(title(p)) !== -1; });
+    var track = el('span', 'gw-ltrack');
+    var gap = el('span', 'gw-gap' + (h.ShareF > d.ShareF ? ' is-rev' : ''));
+    gap.style.left = Math.min(h.ShareF, d.ShareF) + '%';
+    gap.style.width = Math.abs(h.ShareF - d.ShareF) + '%';
+    var dh = el('span', 'gw-dot is-head'); dh.style.left = h.ShareF + '%';
+    var dd = el('span', 'gw-dot is-dep'); dd.style.left = d.ShareF + '%';
+    track.append.apply(track, axes().concat([gap, dh, dd]));
+    var nums = el('span', 'gw-nums');
+    nums.append(el('b', null, Math.round(h.ShareF) + '%'), t(' → ' + Math.round(d.ShareF) + '%'));
+    var note = k[3] + ' (' + fmt(h.Total) + ') / ' + k[4] + ' (' + fmt(d.Total) + ')';
+    var aria = k[0] + ': жени са ' + pct(h.ShareF) + ' от ръководителите (' + fmt(h.F) + ' от ' + fmt(h.Total) + ') и ' + pct(d.ShareF) + ' от заместниците или членовете (' + fmt(d.F) + ' от ' + fmt(d.Total) + ')';
+    return ladderRow(k[0], note, track, nums, aria);
+  }));
 
   // Export
   function csvCell(v) { var s = String(v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
