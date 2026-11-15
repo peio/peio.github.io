@@ -140,7 +140,7 @@ button.gw-row:hover, .gw-row[aria-expanded="true"] { background: var(--panel); }
   <header class="gw-head" id="summary">
     <p class="gw-eyebrow">Регистър на лицата, заемащи публични длъжности · 2026</p>
     <h1>Жените на публични длъжности в България</h1>
-    <p class="gw-lede" id="lede">Зареждане на данните…</p>
+    <p class="gw-lede" id="lede">Анализ на регистъра на лицата, заемащи публични длъжности към ноември 2026 г.</p>
   </header>
 
   <div class="gw-tiles" id="tiles">
@@ -246,24 +246,7 @@ button.gw-row:hover, .gw-row[aria-expanded="true"] { background: var(--panel); }
   document.getElementById('t-m').textContent = fmt(total.M);
   document.getElementById('t-share').textContent = pct(share(total.F, total.Total));
   document.getElementById('t-low').textContent = fmt(total.Low);
-  var big = cats.filter(function (c) { return c.Total >= 30; });
-  var top = big.slice().sort(function (a, b) { return b.ShareF - a.ShareF || b.Total - a.Total; })[0];
-  var low = big.slice().sort(function (a, b) { return a.ShareF - b.ShareF || b.Total - a.Total; })[0];
-  var lede = document.getElementById('lede');
-  function b(text) { var e = document.createElement('b'); e.textContent = text; return e; }
   function t(text) { return document.createTextNode(text); }
-  // Category names are long legal descriptions; the sentence quotes their opening words.
-  function short(s) {
-    var clean = s.replace(/\.\.\.$/, '');
-    if (clean.length <= 60) return clean;
-    var cut = clean.slice(0, 60);
-    return cut.slice(0, cut.lastIndexOf(' ')).replace(/[,;]$/, '') + '…';
-  }
-  lede.replaceChildren(
-    t('Жените са '), b(pct(share(total.F, total.Total))), t(' от '), b(fmt(total.Total)),
-    t(' лица в регистъра за 2026 г. Най-висок е делът им в категорията „' + short(top.name) + '“ ('), b(pct(top.ShareF)),
-    t('), а най-нисък – в „' + short(low.name) + '“ ('), b(pct(low.ShareF)), t('). Сравнени са категориите с поне 30 души.')
-  );
 
   // Tree
   var S = {sort: 'register', q: '', open: new Set([cats.length > 2 ? cats[2].key : '']), focus: null};
